@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <div class="container">
+        <form method="post" action="{% url 'product_detail' product.pk %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="col-md-4">
+                <label class="form-label" for="inputTitle">{{ product.title }}</label>
+                <input class="form-control" id="inputTitle" type="text" name="title"/>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label" for="inputPrice">{{ product.price }}</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" id="inputPrice" name="price"
+                           aria-label="Dollar amount (with dot and two decimal places)"/>
+                    <span class="input-group-text">$</span>
+                </div>
+            </div>
+            <select name="category">
+                {% for category in categories %}
+                    <option value="{{ category.pk }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+
+            <div class="col-md-4">
+                <label class="form-label" for="inputTag">Images</label>
+                <input class="form-control" id="inputTag" type="file" multiple name="images"/>
+            </div>
+
+            <div class="col-md-12">
+                <button class="btn btn-primary" type="submit">Save changes</button>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -241,3 +241,5 @@ cython_debug/
 #.idea/
 
 .env
+
+.idea

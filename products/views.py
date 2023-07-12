@@ -1,21 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import permission_required, login_required
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.views.generic import ListView, DeleteView
 
 from products.forms import ProductForm
 from products.models import Product, Category, ProductImage, Cart, CartItem
 
 
-# Create your views here.
-
-# class ProductList(ListView):
-#     queryset = Product.objects.all()
-#     template_name = 'product/product_list.html'
-#     context_object_name = 'products'
-
-@login_required(login_url='user/login')
 def product_list(request):
     products = Product.objects.all()
     for product in products:
@@ -28,7 +20,8 @@ def product_list(request):
     return render(request, 'product/product_list.html', context)
 
 
-def edit_contact(request, pk):
+@login_required(login_url='user/login')
+def product_update(request, pk):
     prodcut = get_object_or_404(Product, id=pk)
     context = {
         'product': prodcut,
@@ -46,24 +39,10 @@ def edit_contact(request, pk):
         else:
             print(form.errors)
         return redirect('/')
-    return render(request,'product/product_detail.html', context)
+    return render(request, 'product/product_update.html', context)
 
 
-# @permission_required('apps.add_product')
-# def add_product(request):
-#     categorys = Category.objects.all()
-#     if request.method == 'POST':
-#         form = ProductForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.instance.author = request.user
-#             product = form.save()
-#             for image in request.FILES.getlist('images'):
-#                 ProductImage.objects.create(image=image, product=product)
-#
-#         return redirect('/')
-#     return render(request, 'product/add_product.html', {'categorys': categorys})
-
-# @login_required
+@login_required(login_url='user/login')
 def add_product(request):
     category = Category.objects.all()
     data = request.POST
@@ -83,11 +62,13 @@ def add_product(request):
     return render(request, 'product/add_product.html', context)
 
 
+@login_required(login_url='user/login')
 class ProductDeleteView(DeleteView, LoginRequiredMixin):
     model = Product
     success_url = '/'
 
 
+@login_required(login_url='user/login')
 class AddCartCreateView(LoginRequiredMixin, View):
     def get(self, request, pk=None):
         product = get_object_or_404(Product, pk=pk)
@@ -100,6 +81,7 @@ class AddCartCreateView(LoginRequiredMixin, View):
         return redirect('product_list')
 
 
+@login_required(login_url='user/login')
 class ShowCart(ListView):
     queryset = CartItem.objects.all()
     template_name = 'product/karzinka.html'
@@ -110,6 +92,7 @@ class ShowCart(ListView):
         return CartItem.objects.filter(cart=cart)
 
 
+@login_required(login_url='user/login')
 def delete_showcard(request, pk):
     caritem = CartItem.objects.filter(id=pk)
     caritem.delete()

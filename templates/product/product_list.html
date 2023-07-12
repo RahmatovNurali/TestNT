@@ -412,7 +412,7 @@
 
                     <div class="col-md-5 col-sm-12 col-xs-12">
                         <div class="product-image">
-                            <a class="d-block h-100" href="{% url 'product_detail' product.id %}">
+                            <a class="d-block h-100" href="{% url 'product_update' product.id %}">
                                 <img src="{{ product.productimage_set.first.image.url }}" alt="194x228"
                                      class="img-responsive rotprod">
                             </a>
@@ -437,7 +437,7 @@
                         <div class="product-info smart-form">
                             <div class="row">
                                 <div class="col-md-12" style="margin-top: 50px"><a class="d-block h-100"
-                                                                                   href="{% url 'product_detail' product.id %}">
+                                                                                   href="{% url 'product_update' product.id %}">
                                 </a>
                                     <a class="btn btn-sm btn-primary d-lg-block mt-lg-2"
                                        href="{% url 'add_cart' product.pk %}">
